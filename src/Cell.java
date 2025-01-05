@@ -1,9 +1,6 @@
 
-import java.util.regex.Pattern;
-
-
 public class Cell {
-   public boolean isNumber(String text)
+   public static boolean isNumber(String text)
     {
      if (text == null || text.isEmpty())
         return false;
@@ -11,7 +8,7 @@ public class Cell {
         return text.matches(numberRegex);
     }
 
-    public boolean isText(String text)
+    public static boolean isText(String text)
     {
         if (text == null || text.isEmpty())
             return false;
@@ -20,16 +17,16 @@ public class Cell {
     }
 
 
-    public boolean isForm(String text){
+    public static boolean isForm(String text){
         if (text == null || text.isEmpty())
             return false;
-        String formRegex = "^=(?:-?\\d+(\\.\\d+)?|[A-Z]{1,2}\\d+|\\([^)]+\\))([+*/-](?:-?\\d+(\\.\\d+)?|[A-Z]{1,2}\\d+|\\([^)]+\\)))*$\n"; // להסביר
+        String formRegex = "^=(?:-?\\d+(\\.\\d+)?|[A-Z]{1,2}\\d+|\\([^)]+\\))([+*/-](?:-?\\d+(\\.\\d+)?|[A-Z]{1,2}\\d+|\\([^)]+\\)))*$\n";
         return text.matches(formRegex);
 
     }
 
 
-    public double basicCalculator(String s) {
+    public static double basicCalculator(String s) {
        double ans=0;
         String[] numbers = s.split("([+\\-*/])", 2); // פיצול המספרים
         String operator = s.replaceAll("[0-9.]", ""); // מציאת האופרטור
@@ -51,23 +48,23 @@ public class Cell {
         }
         return ans;
     }
-        public double calculateRemaining(String s) {
-            String[] tokens = s.split("(?=[*/])|(?<=[*/])"); // פיצול לפי כפל וחילוק
-            double result = basicCalculator(tokens[0]); // מחשבים את החלק הראשון
-            for (int i = 1; i < tokens.length; i += 2) {
-                String operator = tokens[i];
-                double num = basicCalculator(tokens[i + 1]);
+        public static double calculateRemaining(String s) {
+            String[] numbers = s.split("(?=[*/])|(?<=[*/])"); // פיצול לפי כפל וחילוק
+            double result = basicCalculator(numbers[0]); // מחשבים את החלק הראשון
+            for (int i = 1; i < numbers.length; i += 2) {
+                String operator = numbers[i];
+                double num = basicCalculator(numbers[i + 1]);
                 if (operator.equals("*")) {
                     result *= num;
                 } else if (operator.equals("/")) {
                     result /= num;
                 }
             }
-            tokens = String.valueOf(result).split("(?=[+-])|(?<=[+-])"); // פיצול לפי חיבור וחיסור
-            result = basicCalculator(tokens[0]); // מחשבים את החלק הראשון
-            for (int i = 1; i < tokens.length; i += 2) {
-                String operator = tokens[i];
-                double num = basicCalculator(tokens[i + 1]);
+            numbers = String.valueOf(result).split("(?=[+-])|(?<=[+-])"); // פיצול לפי חיבור וחיסור
+            result = basicCalculator(numbers[0]); // מחשבים את החלק הראשון
+            for (int i = 1; i < numbers.length; i += 2) {
+                String operator = numbers[i];
+                double num = basicCalculator(numbers[i + 1]);
                 if (operator.equals("+")) {
                     result += num;
                 } else if (operator.equals("-")) {
@@ -76,7 +73,7 @@ public class Cell {
             }
             return result;
         }
-        public double computeForm(String form){
+        public static double computeForm(String form){
             while (form.contains("(")) {
                 int openIndex = form.lastIndexOf("("); //סוגר פותח הכי פנימי
                 int closeIndex = form.indexOf(")", openIndex); //סוגר סוגר המתאים
