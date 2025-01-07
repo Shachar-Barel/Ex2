@@ -46,9 +46,9 @@ class CellTest {
   }
   @Test
     void isFormCheck() {
-    String s1 = "=1";
+    String s1 = "=1+a3";
     assertEquals(firstPartCell.isForm(s1), true);
-    String s2 = "=2+1";
+    String s2 = "=A1+B2*C3-D4";
     assertEquals(firstPartCell.isForm(s2), true);
     String s3 = "=1-1";
     assertEquals(firstPartCell.isForm(s3), true);
@@ -56,7 +56,7 @@ class CellTest {
     assertEquals(firstPartCell.isForm(s4), true);
     String s5 = "=4/2";
     assertEquals(firstPartCell.isForm(s5), true);
-    String s6 = "=(1+2)*3";
+    String s6 = "=(1+2)*3+a1";
     assertEquals(firstPartCell.isForm(s6), true);
     String s7 = "=(1+(2*3))";
     assertEquals(firstPartCell.isForm(s7), true);

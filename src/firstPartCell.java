@@ -1,18 +1,33 @@
 
 public class firstPartCell {
     public static boolean isNumber(String text) {
-        if (text == null || text.isEmpty())
-            return false;
-        try {
-            Double.parseDouble(text);
-            return true;
-        } catch (NumberFormatException e) {
+        if (text == null || text.isEmpty()) {
             return false;
         }
+        //check if the string matches the pattern of a valid number
+        boolean hasDecimalPoint = false;
+        boolean hasDigits = false;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (i == 0 && (c == '-' || c == '+')) {
+                //allow sign at the beginning
+                continue;
+            } else if (c == '.') {
+                if (hasDecimalPoint) {
+                    return false; // multiple decimal points are not allowed
+                }
+                hasDecimalPoint = true;
+            } else if (Character.isDigit(c)) {
+                hasDigits = true; // at least one digit must exist
+            } else {
+                return false; // invalid character
+            }
+        }
+        return hasDigits; // ensure there was at least one digit
     }
 
     public static boolean isText(String text) {
-        if (text == null || text.isEmpty())
+        if (text == null || text.isEmpty() || text.charAt(0)== '=')
             return false;
         String textRegex = ".*[a-zA-Z{}].*"; // regex to check if it's a text
         return text.matches(textRegex);
