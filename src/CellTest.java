@@ -78,16 +78,6 @@ class CellTest {
     assertEquals(firstPartCell.isForm(s15), false);
   }
   @Test
-  void testBasicCalculator() {
-    assertEquals(5.0, firstPartCell.basicCalculator("2+3"));
-    assertEquals(-1.0, firstPartCell.basicCalculator("2-3"));
-    assertEquals(6.0, firstPartCell.basicCalculator("2*3"));
-    assertEquals(2.0, firstPartCell.basicCalculator("6/3"));
-    assertThrows(NumberFormatException.class, () -> firstPartCell.basicCalculator("2+"));
-    assertThrows(ArrayIndexOutOfBoundsException.class, () -> firstPartCell.basicCalculator("2"));
-  }
-
-  @Test
   void testCalculateRemaining() {
     assertEquals(5.0, firstPartCell.calculateRemaining("2+3*5/5"));
     assertEquals(15.0, firstPartCell.calculateRemaining("5*3"));

@@ -82,27 +82,6 @@ public class firstPartCell {
         }
         return !expectOperand;
     }
-    //////////////////////////////////////////////////////////////////////
-
-    public static double basicCalculator(String s) {
-        double ans = 0;
-        String[] numbers = s.split("([+\\-*/])", 2);
-        String operator = s.replaceAll("[0-9.]", "").trim();
-        double num1 = Double.parseDouble(numbers[0].trim());
-        double num2 = Double.parseDouble(numbers[1].trim());
-        switch (operator) {
-            case "/":
-                return num1 / num2;
-            case "*":
-                return num1 * num2;
-            case "+":
-                return num1 + num2;
-            case "-":
-                return num1 - num2;
-        }
-        return ans;
-    }
-
     /////////////////////////////////////////////////////////////////
     public static double calculateRemaining(String s) {
         double result = 0;
