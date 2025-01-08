@@ -9,7 +9,14 @@ public class SCellTest {
     public void setUp() {
         cell = new SCell("");
     }
+    @Test
+    public void testcomputeOrder() {
+        String s= "=a1+b3+3";
+        assertEquals(2, SCell.computeOrder(s));
+        String s2= "=(a1+3.5)-3+3+g4";
+        assertEquals(2, SCell.computeOrder(s2));
 
+    }
     @Test
     public void testSetData() {
         cell.setData("=(1+2)*3+a1");
@@ -56,20 +63,23 @@ public class SCellTest {
         cell.setData("=1+a3");
         assertEquals(Ex2Utils.FORM, cell.getType());
         cell.setData("=123+");
-        assertEquals(Ex2Utils.ERR_FORM_FORMAT, cell.getType());
+        assertEquals(Ex2Utils.ERR, cell.getType());
     }
 
     @Test
     public void testGetOrder() {
-        assertEquals(0, cell.getOrder());
-        cell.setOrder(2);
-        assertEquals(2, cell.getOrder());
-        cell.setOrder(5);
-        assertEquals(5, cell.getOrder());
-        cell.setOrder(1);
-        assertEquals(1, cell.getOrder());
-        cell.setOrder(3);
-        assertEquals(3, cell.getOrder());
+        SCell numberCell = new SCell("123");
+        assertEquals(0, numberCell.getOrder());
+        SCell textCell = new SCell("Hello");
+        assertEquals(0, textCell.getOrder());
+        SCell simpleFormulaCell = new SCell("=A1+B2");
+        assertEquals(3, simpleFormulaCell.getOrder());
+        SCell FormulaCell = new SCell("=A1*(B2+C3)");
+        assertEquals(4, FormulaCell.getOrder());
+        SCell invalidFormulaCell = new SCell("=++");
+        assertEquals(-1, invalidFormulaCell.getOrder());
+        SCell emptyCell = new SCell("");
+        assertEquals(-1, emptyCell.getOrder());
     }
 
     @Test

@@ -16,13 +16,13 @@ public class CellEntryTest {
     @Test
     public void testInvalidToString() {
         CellEntry cell = new CellEntry(-1, 0);
-        assertEquals("Invalid Cell", cell.toString());
+        assertEquals(Ex2Utils.ERR_FORM, cell.toString());
         cell = new CellEntry(0, -1);
-        assertEquals("Invalid Cell", cell.toString());
+        assertEquals(Ex2Utils.ERR_FORM, cell.toString());
         cell = new CellEntry(26, 0);
-        assertEquals("Invalid Cell", cell.toString());
+        assertEquals(Ex2Utils.ERR_FORM, cell.toString());
         cell = new CellEntry(0, 100);
-        assertEquals("Invalid Cell", cell.toString());
+        assertEquals(Ex2Utils.ERR_FORM, cell.toString());
     }
 
     @Test

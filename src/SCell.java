@@ -18,19 +18,37 @@ public class SCell implements Cell {
     public void setData(String s) {
         line = s;
         if (isNumber(s)) {
-            type = Ex2Utils.NUMBER;
+            setType(Ex2Utils.NUMBER);
         } else if (isText(s)) {
-            type = Ex2Utils.TEXT;
+            setType(Ex2Utils.TEXT);
         } else if (isForm(s)) {
-                type = Ex2Utils.FORM;
-            } else {
-                type = Ex2Utils.ERR_FORM_FORMAT;
+            setType(Ex2Utils.FORM);
+        } else {
+            setType(Ex2Utils.ERR);
+        }
+    }
+    public static int computeOrder(String formula) {
+        int count = 0;
+        for (int i = 0; i < formula.length(); i++) {
+            char c = formula.charAt(i);
+            if (Character.isLetter(c)) {
+                while (i < formula.length() && (Character.isLetterOrDigit(formula.charAt(i)))) {
+                    i++;
+                }
+                count++;
             }
         }
-
+        return  1+ count;
+    }
     @Override
     public int getOrder() {
-        return order;
+        if (type == Ex2Utils.NUMBER || type == Ex2Utils.TEXT) {
+            return 0;
+        }
+        if (type == Ex2Utils.FORM) {
+            return computeOrder(line);
+        }
+        return -1; // Error for invalid types
     }
 
     @Override
@@ -80,7 +98,7 @@ public class SCell implements Cell {
     }
 
     ////////////////////////////////////////////////////////////
-    private boolean isText(String text) {
+    public static boolean isText(String text) {
         if (text == null || text.isEmpty() || text.charAt(0)== '=')
             return false;
         String textRegex = ".*[a-zA-Z{}].*"; // regex to check if it's a text
@@ -124,13 +142,13 @@ public class SCell implements Cell {
             }
             if (expectOperand) {
 
-                if (Character.isDigit(current)) { //check if it's a number
-                    while (i + 1 < formula.length() && Character.isDigit(formula.charAt(i + 1))) {//kip over the full number
+                if (Character.isDigit(current)) {
+                    while (i + 1 < formula.length() && Character.isDigit(formula.charAt(i + 1))) {
                         i++;
                     }
                     expectOperand = false;
                 } else if (Character.isLetter(current)) {//check if it's a cell reference
-                    while (i + 1 < formula.length() && Character.isLetterOrDigit(formula.charAt(i + 1))) { //check if followed by numbers and the letter is not the last char
+                    while (i + 1 < formula.length() && Character.isLetterOrDigit(formula.charAt(i + 1))) {
                         i++;
                     }
                     expectOperand = false;

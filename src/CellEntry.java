@@ -11,7 +11,7 @@ private int y;
     @Override
     public String toString() {
         if (!isValid()) {
-            return "Invalid Cell";
+            return Ex2Utils.ERR_FORM;
         }
         return Ex2Utils.ABC[x] + (y + 1);
     }
