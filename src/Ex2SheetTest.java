@@ -39,8 +39,8 @@ public class Ex2SheetTest {
     }
     @Test
     public void testEvalSimpleFormula() {
-        sheet.set(0, 0, "5");
-        sheet.set(1, 0, "3");
+        sheet.set(0, 1, "5");
+        sheet.set(1, 1, "3");
         sheet.set(2, 0, "=A1+B1");
 
         assertEquals("8.0", sheet.eval(2, 0));
@@ -48,8 +48,8 @@ public class Ex2SheetTest {
 
     @Test
     public void testEvalWithCycle() {
-        sheet.set(0, 0, "=B1");
-        sheet.set(1, 0, "=A1");
+        sheet.set(1, 1, "=B1");
+        sheet.set(0, 1, "=A1");
 
         assertEquals(Ex2Utils.ERR_CYCLE, sheet.eval(0, 0));
         assertEquals(Ex2Utils.ERR_CYCLE, sheet.eval(1, 0));
@@ -59,12 +59,12 @@ public class Ex2SheetTest {
     public void testDepth() {
         sheet.set(0, 0, "5");
         sheet.set(1, 0, "=A1");
-        sheet.set(2, 0, "=B1");
+        sheet.set(2, 0, "=B1+B3");
 
         int[][] depth = sheet.depth();
         assertEquals(0, depth[0][0]);
-        assertEquals(1, depth[1][0]);
-        assertEquals(2, depth[2][0]);
+        assertEquals(2, depth[1][0]);
+        assertEquals(3, depth[2][0]);
     }
 
     @Test

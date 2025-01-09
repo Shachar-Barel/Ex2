@@ -3,9 +3,7 @@ import java.io.IOException;
 
 public class Ex2Sheet implements Sheet {
     private Cell[][] table;
-    // Add your code here
 
-    // ///////////////////
     public Ex2Sheet(int x, int y) {
         table = new SCell[x][y];
         for(int i=0;i<x;i=i+1) {
@@ -43,7 +41,7 @@ public class Ex2Sheet implements Sheet {
         }
         int x = Character.toUpperCase(col) - 'A'; // Convert column to index
         try {
-            int y = Integer.parseInt(cords.substring(1)) - 1; // Convert row to index
+            int y = Integer.parseInt(cords.substring(1)); // Convert row to index
             return get(x, y);
         } catch (NumberFormatException e) {
             return null; // Invalid row
@@ -76,13 +74,28 @@ public class Ex2Sheet implements Sheet {
     }
 
 
+ public int computeDepth(int x, int y){
+        int ans=0;
+    Cell cell = get(x,y);
+     if(cell== null || cell.getType()== 1 || cell.getType()== 2)
+         return ans;
+     if(cell.getType() == 3) {
 
+     }
+ return 0;
+ }
     @Override
     public int[][] depth() {
-        int[][] ans = new int[width()][height()];
-        // Add your code here
+        int x= width();
+        int y = height();
+        int[][] ans = new int[x][y];
+        for(int i=0;i<x;i=i+1) {
+            for(int j=0;j<y;j=j+1) {
+                Cell cell = get(x,y);
+                        ans[x][y]= cell.getOrder();
+                }
+            }
 
-        // ///////////////////
         return ans;
     }
 
@@ -99,62 +112,71 @@ public class Ex2Sheet implements Sheet {
 
         /////////////////////
     }
-    public String getCellReference(int x, int y) {
-        // Validate indices
-        if (!isIn(x, y)) {
-            return Ex2Utils.ERR_FORM; // Out of bounds
-        }
-
-        // Create a CellEntry and return its string representation
-        CellEntry entry = new CellEntry(x, y);
-        return entry.toString();
-    }
     @Override
     public String eval(int x, int y) {
         if (!isIn(x, y))
             return Ex2Utils.ERR_FORM;
-        String ans= null;
         String cell = get(x,y).getData();
-        if(get(x,y)!= null){
-            ans = get(x,y).toString();
-        }
         if(SCell.isForm(cell)){
             double result = computeForm(cell);
             return String.valueOf(result);
         }
-        if(SCell.isNumber(cell)){
+        if(SCell.isNumber(cell)) {
             double n = Double.parseDouble(cell);
             return String.valueOf(n);
-
         }
-        if(SCell.isText(cell)) {
             return cell;
+
+    }
+    ///////////////////////////
+    public String getCellValue(String s) {
+        Cell cell = get(s);
+        if (cell == null) {
+            return Ex2Utils.ERR_FORM;
         }
-        return ans;
+        return cell.toString();
     }
 
-    public static double cellRef(SCell s) {
-        if (s.getType() != Ex2Utils.NUMBER) {
-            return Ex2Utils.ERR;
-        }
-        return Double.parseDouble(s.getData());
-    }
     /////////////////////////////////////////////////////////////////
-    public static double calculateRemaining(String s) {
+    public double calculateRemaining(String s) {
         double result = 0;
         double current = 0;
-        char lastOperator = '+'; //default operator
+        char lastOperator = '+'; // Default operator
         int i = 0;
+
         while (i < s.length()) {
-            if (Character.isWhitespace(s.charAt(i))) {//skip spaces
+            if (Character.isWhitespace(s.charAt(i))) { // Skip spaces
+                i++;
                 continue;
             }
+
             String number = "";
-            while (i < s.length() && (Character.isDigit(s.charAt(i)) || s.charAt(i) == '.')) {
-                number += s.charAt(i);
-                i++;
+            // Check if the current character is a letter (possible cell reference)
+            if (Character.isLetter(s.charAt(i))) {
+                String cellRef = "";
+                // Build the cell reference
+                while (i < s.length() && !isOperator(s.charAt(i))) {
+                    cellRef += s.charAt(i);
+                    i++;
+                }
+                // Get the value of the cell reference
+                String cellValue = getCellValue(cellRef);
+                if (cellValue.equals(Ex2Utils.ERR_FORM)) {
+                    throw new IllegalArgumentException(Ex2Utils.ERR_FORM);
+                }
+                number = cellValue; // Treat cell value as a number
+            } else {
+                // Parse digits or decimal numbers
+                while (i < s.length() && (Character.isDigit(s.charAt(i)) || s.charAt(i) == '.')) {
+                    number += s.charAt(i);
+                    i++;
+                }
             }
+
+            // Parse the number into a double
             double value = Double.parseDouble(number);
+
+            // Apply the last operator
             if (lastOperator == '*') {
                 current *= value;
             } else if (lastOperator == '/') {
@@ -166,17 +188,22 @@ public class Ex2Sheet implements Sheet {
                 result += current;
                 current = -value;
             }
+
+            // Update the operator
             if (i < s.length() && isOperator(s.charAt(i))) {
                 lastOperator = s.charAt(i);
                 i++;
             }
         }
+
+        // Add the last processed value
         result += current;
         return result;
     }
 
+
     ///////////////////////////////////////////////////////////////////////////////////////////
-    public static double computeForm(String form) {
+    public double computeForm(String form) {
         form= form.substring(1);
         while (form.contains("(")) {
             int openIndex = form.lastIndexOf("(");

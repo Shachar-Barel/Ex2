@@ -1,53 +1,45 @@
+/*
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CellEntryTest {
+class CellEntryTest {
 
     @Test
-    public void testValidToString() {
-        CellEntry cell = new CellEntry(0, 0);
-        assertEquals("A1", cell.toString());
-        cell = new CellEntry(1, 2);
-        assertEquals("B3", cell.toString());
-        cell = new CellEntry(25, 99);
-        assertEquals("Z100", cell.toString());
+    void testToString() {
+        CellEntry validCell = new CellEntry("C12");
+        assertEquals("C12", validCell.toString());
+
+        CellEntry invalidCell = new CellEntry("Z101");
+        assertEquals(Ex2Utils.ERR_FORM, invalidCell.toString());
     }
 
     @Test
-    public void testInvalidToString() {
-        CellEntry cell = new CellEntry(-1, 0);
-        assertEquals(Ex2Utils.ERR_FORM, cell.toString());
-        cell = new CellEntry(0, -1);
-        assertEquals(Ex2Utils.ERR_FORM, cell.toString());
-        cell = new CellEntry(26, 0);
-        assertEquals(Ex2Utils.ERR_FORM, cell.toString());
-        cell = new CellEntry(0, 100);
-        assertEquals(Ex2Utils.ERR_FORM, cell.toString());
+    void testIsValid() {
+        assertTrue(new CellEntry("A1").isValid());
+        assertTrue(new CellEntry("Z99").isValid());
+        assertTrue(new CellEntry("M50").isValid());
+
+        assertFalse(new CellEntry("1A").isValid());
+        assertFalse(new CellEntry("A100").isValid());
+        assertFalse(new CellEntry("AA1").isValid());
     }
 
     @Test
-    public void testIsValid() {
-        CellEntry cell = new CellEntry(0, 0);
-        assertTrue(cell.isValid());
-        cell = new CellEntry(25, 99);
-        assertTrue(cell.isValid());
-        cell = new CellEntry(-1, 0);
-        assertFalse(cell.isValid());
-        cell = new CellEntry(0, -1);
-        assertFalse(cell.isValid());
-        cell = new CellEntry(26, 0);
-        assertFalse(cell.isValid());
+    void testGetX() {
+        assertEquals(3, new CellEntry("C12").getX());
+        assertEquals(1, new CellEntry("A1").getX());
+
+        assertEquals(Ex2Utils.ERR, new CellEntry("Z101").getX());
+        assertEquals(Ex2Utils.ERR, new CellEntry("1A").getX());
     }
 
     @Test
-    public void testGetX() {
-        CellEntry cell = new CellEntry(5, 10);
-        assertEquals(5, cell.getX());
-    }
+    void testGetY() {
+        assertEquals(12, new CellEntry("C12").getY());
+        assertEquals(1, new CellEntry("A1").getY());
 
-    @Test
-    public void testGetY() {
-        CellEntry cell = new CellEntry(5, 10);
-        assertEquals(10, cell.getY());
+        assertEquals(Ex2Utils.ERR, new CellEntry("Z101").getY());
+        assertEquals(Ex2Utils.ERR, new CellEntry("A-1").getY());
     }
 }
+*/

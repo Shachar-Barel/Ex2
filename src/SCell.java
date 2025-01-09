@@ -1,5 +1,7 @@
 // Add your documentation below:
 
+import java.util.List;
+
 public class SCell implements Cell {
     private String line;
     private int type;

@@ -1,32 +1,42 @@
-// Add your documentation below:
-public class CellEntry  implements Index2D {
-private int x;
-private int y;
 
-   //constructor
+
+public class CellEntry implements Index2D {
+    private int x; // Column index (0-based)
+    private int y; // Row index (0-based)
+
+    // Constructor
     public CellEntry(int x, int y) {
         this.x = x;
         this.y = y;
     }
+
     @Override
     public String toString() {
         if (!isValid()) {
-            return Ex2Utils.ERR_FORM;
+            return Ex2Utils.ERR_FORM; // Return error format if invalid
         }
-        return Ex2Utils.ABC[x] + (y + 1);
+        return toSpreadsheetNotation(x, y);
     }
+
     @Override
     public boolean isValid() {
-        return x >= 0 && x < Ex2Utils.ABC.length && y >= 0 && y < 100;
+        // Validate that x and y are within appropriate bounds
+        return x >= 0 && x < 26 && y >= 0 && y < 100;
     }
 
     @Override
     public int getX() {
-        return x;
+        return isValid() ? x : Ex2Utils.ERR; // Return error if invalid
     }
 
     @Override
     public int getY() {
-        return y;
+        return isValid() ? y : Ex2Utils.ERR; // Return error if invalid
     }
+
+    private String toSpreadsheetNotation(int x, int y) {
+        char column = (char) ('A' + x); // Convert x to a column letter
+        return column + String.valueOf(y); // Convert y to 1-based row index
+    }
+
 }
