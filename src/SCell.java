@@ -29,6 +29,7 @@ public class SCell implements Cell {
             setType(Ex2Utils.ERR);
         }
     }
+
     public static int computeOrder(String formula) {
         int count = 0;
         for (int i = 0; i < formula.length(); i++) {
@@ -40,8 +41,9 @@ public class SCell implements Cell {
                 count++;
             }
         }
-        return  1+ count;
+        return 1 + count;
     }
+
     @Override
     public int getOrder() {
         if (type == Ex2Utils.NUMBER || type == Ex2Utils.TEXT) {
@@ -101,7 +103,7 @@ public class SCell implements Cell {
 
     ////////////////////////////////////////////////////////////
     public static boolean isText(String text) {
-        if (text == null || text.isEmpty() || text.charAt(0)== '=')
+        if (text == null || text.isEmpty() || text.charAt(0) == '=')
             return false;
         String textRegex = ".*[a-zA-Z{}].*"; // regex to check if it's a text
         return text.matches(textRegex);
@@ -125,50 +127,55 @@ public class SCell implements Cell {
 
     /////////////////////////////////////////////////////////////////
     public static boolean isForm(String text) {
-
-        if (text == null || text.isEmpty() || text.charAt(0) != '=') {//check if the input is null or doesn't start with =
+        if (text == null || text.isEmpty() || text.charAt(0) != '=') { // Ensure it starts with '='
             return false;
         }
 
-        String formula = text.substring(1).trim();//remove the '=' at the start
+        String formula = text.substring(1).trim(); // Remove '=' at the start
 
-        if (!areParenthesesBalanced(formula)) {//check if the parentheses are balanced
+        if (!areParenthesesBalanced(formula)) { // Check balanced parentheses
             return false;
         }
-        boolean expectOperand = true;
+
+        boolean expectOperand = true; // Whether an operand is expected
         for (int i = 0; i < formula.length(); i++) {
             char current = formula.charAt(i);
 
-            if (Character.isWhitespace(current)) {//skip spaces
+            if (Character.isWhitespace(current)) { // Skip spaces
                 continue;
             }
-            if (expectOperand) {
 
-                if (Character.isDigit(current)) {
-                    while (i + 1 < formula.length() && Character.isDigit(formula.charAt(i + 1))) {
+            if (expectOperand) {
+                if (current == '+' || current == '-') { // Allow unary operators
+                    continue;
+                }
+                if (Character.isDigit(current)) { // Handle numbers
+                    while (i + 1 < formula.length() && (Character.isDigit(formula.charAt(i + 1)) || formula.charAt(i + 1) == '.')) {
                         i++;
                     }
                     expectOperand = false;
-                } else if (Character.isLetter(current)) {//check if it's a cell reference
+                } else if (Character.isLetter(current)) { // Handle cell references
                     while (i + 1 < formula.length() && Character.isLetterOrDigit(formula.charAt(i + 1))) {
                         i++;
                     }
                     expectOperand = false;
-                } else if (current == '(') {//check if it's an opening parenthesis
+                } else if (current == '(') { // Handle opening parenthesis
                     expectOperand = true;
                 } else {
-                    return false;
+                    return false; // Invalid character for an operand
                 }
-            } else {
-                if (isOperator(current)) {
-                    expectOperand = true; //expect another operand
-                } else if (current == ')') {
-                    expectOperand = false; //doesn't expect an operand right after
+            } else { // Expect operator or closing parenthesis
+                if (isOperator(current)) { // Handle operators
+                    expectOperand = true;
+                } else if (current == ')') { // Handle closing parenthesis
+                    expectOperand = false;
                 } else {
-                    return false;
+                    return false; // Invalid character for this position
                 }
             }
         }
-        return !expectOperand;
+
+        return !expectOperand; // Ensure the formula ends with an operand
     }
+
 }
