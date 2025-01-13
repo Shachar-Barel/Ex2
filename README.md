@@ -3,22 +3,27 @@
 Hello! this is my project for Ex2. It's a basic spreadsheet program where you can enter text, numbers, and formulas into a grid of cells. You can also save your work to a file and load it back later.
 
 
+
+
+
 ![Screenshot 2025-01-13 220231](https://github.com/user-attachments/assets/19b7d3bd-2e46-46bb-a61c-14ac451cf45a)
 
 ## Files
 
-### 1. **Ex2Sheet.java**
+### 1. **Ex2GUI.java**
+This is the graphical interface of the program. It:
+- Lets you click on cells to edit their content.
+- Displays the spreadsheet grid.
+- Allows you to save and load files through buttons.
+
+  
+### 2. **Ex2Sheet.java**
 This is where most of the logic happens. It:
 - Manages the 2D grid of cells.
 - Allows you to get or set cell values.
 - Evaluates formulas like `=A1+B2*3` or `=(2+3)*4`.
 - Handles saving the spreadsheet to a file and loading it back.
 
-### 2. **Ex2GUI.java**
-This is the graphical interface of the program. It:
-- Lets you click on cells to edit their content.
-- Displays the spreadsheet grid.
-- Allows you to save and load files through buttons.
 
 ### 3. **SCell.java**
 This file defines what a cell is. A cell can:
@@ -38,7 +43,7 @@ This is a helper class. It:
 - Provides utility functions for things like checking if a cell is empty.
 
 ### 6. **Cell.java**
-This is another interface that defines the structure of a single cell. It has methods for:
+This is another class that defines the structure of a single cell. It has methods for:
 - Getting the cell's value.
 - Checking its type (text, number, or formula).
 
@@ -46,7 +51,7 @@ This is another interface that defines the structure of a single cell. It has me
 This class manages cell positions in the grid using 2D coordinates.
 
 ### 8. **Index2D.java**
-This is an interface for managing 2D grid indices. It’s used to track cell locations in the spreadsheet.
+This is a class for managing 2D grid indices. It’s used to track cell locations in the spreadsheet.
 
 ---
 
