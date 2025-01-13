@@ -1,6 +1,7 @@
 # Ex2: Simple Spreadsheet Project
 
 Hello! this is my project for Ex2. It's a basic spreadsheet program where you can enter text, numbers, and formulas into a grid of cells. You can also save your work to a file and load it back later.
+![Screenshot 2025-01-13 220231](https://github.com/user-attachments/assets/19b7d3bd-2e46-46bb-a61c-14ac451cf45a)
 
 ## Files
 
