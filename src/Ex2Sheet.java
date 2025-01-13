@@ -22,7 +22,7 @@ public class Ex2Sheet implements Sheet {
         String ans = Ex2Utils.EMPTY_CELL;
         Cell c = get(x,y);
         if(c!=null){ans = eval(x,y);}
-       return ans;
+        return ans;
     }
 
     @Override
@@ -253,25 +253,34 @@ public class Ex2Sheet implements Sheet {
     }
     @Override
     public String eval(int x, int y) {
-        if (!isIn(x, y))
+        if (!isIn(x, y)) {
             return Ex2Utils.ERR_FORM;
-        String cell = get(x,y).getData();
-        int[][] depth = depth();
-        if(SCell.isForm(cell)){
-            this.table[x][y].setType(Ex2Utils.FORM);
-            if(depth[x][y]==-1)
-                return Ex2Utils.ERR_CYCLE;
-            double result = computeForm(cell);
-            return String.valueOf(result);
         }
-        if(SCell.isNumber(cell)) {
+
+        String cell = get(x, y).getData();
+        if (SCell.isForm(cell)) {
+            this.table[x][y].setType(Ex2Utils.FORM);
+            int[][] depth = depth();
+            if (depth[x][y] == -1) {
+                this.table[x][y].setType(Ex2Utils.ERR_CYCLE_FORM);
+                return Ex2Utils.ERR_CYCLE;
+            }
+            try {
+                double result = computeForm(cell);
+                return String.valueOf(result);
+            } catch (IllegalArgumentException e) {
+                this.table[x][y].setType(Ex2Utils.ERR_FORM_FORMAT);
+                return Ex2Utils.ERR_FORM;
+            }
+        } else if (SCell.isNumber(cell)) {
             this.table[x][y].setType(Ex2Utils.NUMBER);
             double n = Double.parseDouble(cell);
             return String.valueOf(n);
         }
-            this.table[x][y].setType(Ex2Utils.TEXT);
-            return cell;
-
+        if (!SCell.isText(cell) && !cell.isEmpty())
+            return Ex2Utils.ERR_FORM;
+        this.table[x][y].setType(Ex2Utils.TEXT);
+        return cell;
     }
     public double calculateRemaining(String s) {
         double result = 0; // Holds the final result
@@ -304,11 +313,14 @@ public class Ex2Sheet implements Sheet {
                 }
                 // Get the cell's data
                 Cell referencedCell = get(cellRef);
-                if (referencedCell == null || referencedCell.getData() == null || referencedCell.getData().isEmpty()) {
-                    throw new IllegalArgumentException(Ex2Utils.EMPTY_CELL); // Error if the cell is empty
+                if (referencedCell.getData() == Ex2Utils.EMPTY_CELL || referencedCell==null || referencedCell.getData() == null || referencedCell.getData().isEmpty()) {
+                    throw new IllegalArgumentException(Ex2Utils.ERR_FORM); // Error if the cell is empty
                 }
-                // Evaluate the cell and assign its value to `number`
+                // Evaluate the cell and assign its value to number
                 String cellValue = eval(Character.toUpperCase(cellRef.charAt(0)) - 'A', Integer.parseInt(cellRef.substring(1)));
+                if (cellValue.equals(Ex2Utils.ERR_FORM)) {
+                    throw new IllegalArgumentException(Ex2Utils.ERR_FORM); // Propagate ERR_FORM for invalid references
+                }
                 number = cellValue;
             } else {
                 // If it's not a reference, it's a number

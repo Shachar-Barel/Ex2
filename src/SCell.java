@@ -18,17 +18,17 @@ public class SCell implements Cell {
 
     @Override
     public void setData(String s) {
-        line = s;
-        if (isNumber(s)) {
+        line = s == null ? Ex2Utils.EMPTY_CELL : s.trim();
+        if (isNumber(line)) {
             setType(Ex2Utils.NUMBER);
-        } else if (isText(s)) {
+        } else if (isText(line)) {
             setType(Ex2Utils.TEXT);
-        } else if (isForm(s)) {
+        } else if (isForm(line)) {
             setType(Ex2Utils.FORM);
-        } else {
-            setType(Ex2Utils.ERR);
-        }
+        } else if (!s.isEmpty())
+            setType(Ex2Utils.ERR_FORM_FORMAT);
     }
+
 
     public static int computeOrder(String formula) {
         int count = 0;
@@ -46,7 +46,7 @@ public class SCell implements Cell {
 
     @Override
     public int getOrder() {
-        if (type == Ex2Utils.NUMBER || type == Ex2Utils.TEXT) {
+        if (type == Ex2Utils.NUMBER || type == Ex2Utils.TEXT)  {
             return 0;
         }
         if (type == Ex2Utils.FORM) {
@@ -103,10 +103,9 @@ public class SCell implements Cell {
 
     ////////////////////////////////////////////////////////////
     public static boolean isText(String text) {
-        if (text == null || text.isEmpty() || text.charAt(0) == '=')
+        if (text == null || text.isEmpty() || text.charAt(0) == '=' || isForm(text) || isNumber(text))
             return false;
-        String textRegex = ".*[a-zA-Z{}].*"; // regex to check if it's a text
-        return text.matches(textRegex);
+        return true;
     }
 
     /////////////////////////////////////////////////////////////

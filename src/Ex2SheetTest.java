@@ -30,6 +30,15 @@ public class Ex2SheetTest {
         assertEquals(-1, depthMatrix[0][1]); // A1
     }
     @Test
+    void testInvalidFormula() {
+        SCell cell = new SCell("=a1+");
+        assertEquals(Ex2Utils.ERR_FORM_FORMAT, cell.getType());
+
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+        sheet.set(0, 0, "=a1+");
+        assertEquals(Ex2Utils.ERR_FORM, sheet.eval(0, 0));
+    }
+    @Test
     public void testValue() {
         sheet.set(0, 1, "42");
         assertEquals("42.0", sheet.value(0, 1));

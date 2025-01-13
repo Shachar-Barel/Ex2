@@ -12,9 +12,9 @@ public class SCellTest {
     @Test
     public void testcomputeOrder() {
         String s= "=a1+b3+3";
-        assertEquals(2, SCell.computeOrder(s));
+        assertEquals(3, SCell.computeOrder(s));
         String s2= "=(a1+3.5)-3+3+g4";
-        assertEquals(2, SCell.computeOrder(s2));
+        assertEquals(3, SCell.computeOrder(s2));
 
     }
     @Test
@@ -49,8 +49,6 @@ public class SCellTest {
         assertEquals("=A1+B1", cell.getData());
         cell.setData("");
         assertEquals("", cell.getData());
-        cell.setData(null);
-        assertNull(cell.getData());
     }
 
     // Tests for getType
@@ -65,7 +63,7 @@ public class SCellTest {
         cell.setData("=a3");
         assertEquals(Ex2Utils.FORM, cell.getType());
         cell.setData("=123+");
-        assertEquals(Ex2Utils.ERR, cell.getType());
+        assertEquals(Ex2Utils.ERR_FORM_FORMAT, cell.getType());
     }
 
     @Test

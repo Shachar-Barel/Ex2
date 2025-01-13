@@ -1,8 +1,6 @@
-
-
 public class CellEntry implements Index2D {
     private int x; // Column index (0-based)
-    private int y; // Row index (0-based)
+    private int y; // Row index (1-based)
 
     // Constructor
     public CellEntry(int x, int y) {
@@ -21,7 +19,7 @@ public class CellEntry implements Index2D {
     @Override
     public boolean isValid() {
         // Validate that x and y are within appropriate bounds
-        return x >= 0 && x < 26 && y >= 0 && y < 100;
+        return x >= 0 && x < 26 && y >= 1 && y <= 100; // Rows are 1-based
     }
 
     @Override
@@ -36,7 +34,6 @@ public class CellEntry implements Index2D {
 
     private String toSpreadsheetNotation(int x, int y) {
         char column = (char) ('A' + x); // Convert x to a column letter
-        return column + String.valueOf(y); // Convert y to 1-based row index
+        return column + String.valueOf(y); // Keep y as 1-based
     }
-
 }
