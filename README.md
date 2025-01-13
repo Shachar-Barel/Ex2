@@ -66,6 +66,26 @@ This is a class for managing 2D grid indices. It’s used to track cell location
 - **Save and Load**: Save the spreadsheet to a file and load it later.
 - **GUI**: Use a graphical interface to interact with the spreadsheet.
 
+### Cycle and Error Handling in Spreadsheet
+
+The spreadsheet program ensures robust handling of invalid inputs and self-referential cycles in formulas. Below are the mechanisms implemented for managing these cases:
+
+#### **Cycle Detection**
+A cycle occurs when a formula references a cell that directly or indirectly depends on itself. For example:
+- If `A1` references `B1`, and `B1` references `A1`, this forms a loop.
+- The depth calculation identifies such cycles during formula evaluation. Cells involved in a cycle are marked with the error code `ERR_CYCLE`.
+
+In the GUI, cells detected as part of a cycle are displayed in **red**, making it visually clear to the user that a circular dependency exists.
+
+#### **ERR_FORM Handling**
+When invalid formulas are entered, the program marks them with `ERR_FORM`. Examples of invalid formulas include:
+- Incomplete expressions, like `=A1+`
+- Non-matching parentheses, such as `=(A1+B2`
+- References to invalid cells or improper formats like `=123A`
+
+Cells with `ERR_FORM` are displayed in **red** in the GUI. The error handling ensures that invalid formulas do not disrupt the calculation or display of other cells.
+
+
 ---
 
 ## How to Use
